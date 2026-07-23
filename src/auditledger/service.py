@@ -8,6 +8,7 @@ invoice's entire disposition from the log alone, no pipeline re-run required.
 
 from __future__ import annotations
 
+import os
 import sqlite3
 
 from . import config
@@ -79,6 +80,32 @@ def build_and_process(db_path: str = config.DB_PATH, cfg=config, client="auto") 
     finally:
         conn.close()
     return dataset
+
+
+def is_populated(db_path: str = config.DB_PATH) -> bool:
+    """True if the database exists and already holds processed results."""
+    if not os.path.exists(db_path):
+        return False
+    try:
+        from .db.database import connect
+
+        conn = connect(db_path)
+        try:
+            return conn.execute("SELECT COUNT(*) FROM audit_log").fetchone()[0] > 0
+        finally:
+            conn.close()
+    except sqlite3.Error:
+        return False
+
+
+def ensure_database(db_path: str = config.DB_PATH, cfg=config, client="auto") -> None:
+    """Build + process the database only if it isn't already populated.
+
+    This is what lets a single launch command bring a fresh clone to life without
+    wiping human resolutions on every dashboard rerun.
+    """
+    if not is_populated(db_path):
+        build_and_process(db_path, cfg, client=client)
 
 
 def explain_invoice(conn: sqlite3.Connection, invoice_id: str) -> dict:
