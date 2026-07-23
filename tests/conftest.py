@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import pytest  # noqa: E402
 
+from auditledger.agents.pipeline import run_pipeline  # noqa: E402
 from auditledger.data.seeding import build_full_dataset  # noqa: E402
 from auditledger.matching.three_way_match import run_reconciliation  # noqa: E402
 
@@ -27,6 +28,13 @@ def dataset():
 @pytest.fixture(scope="session")
 def results(dataset):
     return run_reconciliation(dataset)
+
+
+@pytest.fixture(scope="session")
+def reports(dataset):
+    # client=None forces the deterministic offline path so the gate is free,
+    # reproducible, and independent of any API key.
+    return run_pipeline(dataset, client=None)
 
 
 @pytest.fixture(scope="session")

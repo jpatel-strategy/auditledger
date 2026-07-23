@@ -41,3 +41,23 @@ MODEL: str = os.getenv("AUDITLEDGER_MODEL", "claude-haiku-4-5-20251001")
 # The manual-processing benchmark we measure savings against. Deliberately the
 # conservative LOW end of the published $12.50–$40 range so ROI is never inflated.
 MANUAL_COST_PER_INVOICE_USD: float = 12.50
+
+# --- Agent decision policy (Milestone 2) -----------------------------------
+# The visible, configurable confidence threshold at the heart of the thesis: an
+# invoice may only be AUTO-APPROVE'd when the agent's confidence meets this bar.
+# Exposed here so a reviewer can tighten or loosen the automation appetite.
+CONFIDENCE_THRESHOLD: float = 0.85
+
+# Confidence penalties by the most severe discrepancy found. These make the
+# score explainable — every point deducted traces to a named control finding.
+SEVERITY_CONFIDENCE_PENALTY: dict[str, float] = {
+    "HIGH": 0.55,
+    "MEDIUM": 0.40,
+    "LOW": 0.25,
+}
+# Extra penalty when the vendor's own history is poor (from the risk profile).
+RISK_TIER_CONFIDENCE_PENALTY: dict[str, float] = {
+    "HIGH": 0.20,
+    "MEDIUM": 0.08,
+    "LOW": 0.0,
+}
