@@ -1,0 +1,17 @@
+# AuditLedger dependencies.
+# The deterministic reconciliation core (Milestone 1) uses only the Python
+# standard library — nothing below touches the matching math, which keeps the
+# audit-critical path free of third-party black boxes.
+
+# Testing (Milestone 1+): deterministic verification gate
+pytest>=8.0
+
+# LLM extraction & agent loop (Milestone 2+)
+anthropic>=0.40
+python-dotenv>=1.0
+
+# Analytics helpers (Milestone 3+)
+pandas>=2.2
+
+# Executive dashboard (Milestone 4)
+streamlit>=1.40
