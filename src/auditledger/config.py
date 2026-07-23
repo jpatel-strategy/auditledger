@@ -42,6 +42,12 @@ MODEL: str = os.getenv("AUDITLEDGER_MODEL", "claude-haiku-4-5-20251001")
 # conservative LOW end of the published $12.50–$40 range so ROI is never inflated.
 MANUAL_COST_PER_INVOICE_USD: float = 12.50
 
+# Manual touch-time per invoice, used only for the *estimated* hours-saved
+# metric. This is an EXPLICIT, adjustable assumption (not a measured value):
+# manual AP touch time is commonly cited in the 8–15 minute range; we take the
+# conservative 10. Analytics always labels this figure "estimated".
+MANUAL_MINUTES_PER_INVOICE: float = 10.0
+
 # --- Agent decision policy (Milestone 2) -----------------------------------
 # The visible, configurable confidence threshold at the heart of the thesis: an
 # invoice may only be AUTO-APPROVE'd when the agent's confidence meets this bar.

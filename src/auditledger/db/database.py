@@ -104,6 +104,47 @@ CREATE TABLE vendor_risk_profiles (
     historical_error_rate REAL NOT NULL,
     risk_tier             TEXT NOT NULL
 );
+
+-- === Immutable Auditor Layer (Milestone 3) ================================
+-- Append-only history of every decision. Rows are chained by hash so any
+-- after-the-fact tampering is detectable, and DB-level triggers physically
+-- forbid UPDATE/DELETE — the log can only ever grow.
+CREATE TABLE audit_log (
+    entry_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_time     TEXT NOT NULL,
+    invoice_id     TEXT NOT NULL,
+    event_type     TEXT NOT NULL,   -- AGENT_DECISION | CRITIC_REVIEW | HUMAN_DECISION
+    actor          TEXT NOT NULL,   -- primary_agent | critic_agent | human:<name>
+    input_hash     TEXT,
+    model_version  TEXT,
+    classification TEXT,
+    confidence     REAL,
+    reasoning      TEXT,
+    details        TEXT,            -- JSON catch-all (discrepancy_types, issues, notes)
+    prev_hash      TEXT NOT NULL,
+    entry_hash     TEXT NOT NULL
+);
+
+CREATE TRIGGER trg_audit_log_no_update BEFORE UPDATE ON audit_log
+BEGIN SELECT RAISE(ABORT, 'audit_log is append-only; updates are forbidden'); END;
+
+CREATE TRIGGER trg_audit_log_no_delete BEFORE DELETE ON audit_log
+BEGIN SELECT RAISE(ABORT, 'audit_log is append-only; deletes are forbidden'); END;
+
+-- The human work list. Unlike the audit log this is mutable current-state, but
+-- every human resolution is ALSO written immutably into audit_log.
+CREATE TABLE exception_queue (
+    queue_id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    invoice_id        TEXT NOT NULL UNIQUE REFERENCES invoices(invoice_id),
+    ai_classification TEXT NOT NULL,
+    ai_confidence     REAL NOT NULL,
+    ai_reasoning      TEXT NOT NULL,
+    status            TEXT NOT NULL DEFAULT 'PENDING',  -- PENDING|APPROVED|REJECTED
+    reviewer          TEXT,
+    human_note        TEXT,
+    created_at        TEXT NOT NULL,
+    resolved_at       TEXT
+);
 """
 
 

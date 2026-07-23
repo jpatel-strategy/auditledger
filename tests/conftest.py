@@ -38,5 +38,33 @@ def reports(dataset):
 
 
 @pytest.fixture(scope="session")
+def audit_db(tmp_path_factory):
+    """A fully built + processed database (source data, audit log, exception
+    queue) for read-only Milestone 3 tests. Session-scoped for speed."""
+    from auditledger.db.database import connect
+    from auditledger.service import build_and_process
+
+    db_path = tmp_path_factory.mktemp("audit") / "auditledger.db"
+    build_and_process(str(db_path), client=None)
+    conn = connect(str(db_path))
+    yield conn
+    conn.close()
+
+
+@pytest.fixture
+def fresh_db(tmp_path):
+    """A private, function-scoped built + processed database for tests that
+    mutate state (human resolutions, simulated tampering)."""
+    from auditledger.db.database import connect
+    from auditledger.service import build_and_process
+
+    db_path = tmp_path / "auditledger.db"
+    build_and_process(str(db_path), client=None)
+    conn = connect(str(db_path))
+    yield conn
+    conn.close()
+
+
+@pytest.fixture(scope="session")
 def ground_truth_by_invoice(dataset):
     return {gt.invoice_id: gt for gt in dataset.ground_truth}
