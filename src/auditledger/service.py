@@ -60,10 +60,34 @@ def persist_reports(conn: sqlite3.Connection, reports: list[AgentReport]) -> Non
 
 def process_dataset(conn: sqlite3.Connection, dataset: Dataset, cfg=config,
                     client="auto") -> list[AgentReport]:
-    """Run the full agent loop over a dataset and persist everything."""
+    """Run the full agent loop over a dataset and persist everything, recording
+    the measured wall-clock processing time."""
+    import time
+
+    from .agents.llm import model_version
+
+    t0 = time.perf_counter()
     reports = run_pipeline(dataset, cfg, client=client)
+    elapsed = time.perf_counter() - t0
+
     persist_reports(conn, reports)
+    _record_run(conn, len(reports), elapsed, model_version())
     return reports
+
+
+def _record_run(conn: sqlite3.Connection, invoice_count: int, total_seconds: float,
+                model_version: str) -> None:
+    from datetime import datetime, timezone
+
+    avg_ms = round(total_seconds / invoice_count * 1000, 2) if invoice_count else 0.0
+    conn.execute(
+        """INSERT INTO run_metadata
+           (run_at, invoice_count, total_seconds, avg_ms_per_invoice, model_version)
+           VALUES (?,?,?,?,?)""",
+        (datetime.now(timezone.utc).isoformat(), invoice_count,
+         round(total_seconds, 4), avg_ms, model_version),
+    )
+    conn.commit()
 
 
 def build_and_process(db_path: str = config.DB_PATH, cfg=config, client="auto") -> Dataset:

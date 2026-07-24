@@ -98,6 +98,25 @@ def roi_summary(conn: sqlite3.Connection, cfg=config) -> dict:
     }
 
 
+def processing_stats(conn: sqlite3.Connection, cfg=config) -> dict:
+    """The latest run's MEASURED processing speed, contrasted with the manual
+    14.6-day cycle-time benchmark. Returns None-ish defaults if no run recorded."""
+    row = conn.execute(
+        "SELECT * FROM run_metadata ORDER BY run_id DESC LIMIT 1"
+    ).fetchone()
+    if row is None:
+        return {"avg_ms_per_invoice": None, "total_seconds": None,
+                "invoice_count": 0, "model_version": None,
+                "manual_cycle_days": 14.6}
+    return {
+        "avg_ms_per_invoice": row["avg_ms_per_invoice"],
+        "total_seconds": row["total_seconds"],
+        "invoice_count": row["invoice_count"],
+        "model_version": row["model_version"],
+        "manual_cycle_days": 14.6,  # published manual AP cycle-time benchmark
+    }
+
+
 def queue_stats(conn: sqlite3.Connection) -> dict[str, int]:
     rows = conn.execute(
         "SELECT status, COUNT(*) AS n FROM exception_queue GROUP BY status"

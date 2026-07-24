@@ -131,6 +131,17 @@ BEGIN SELECT RAISE(ABORT, 'audit_log is append-only; updates are forbidden'); EN
 CREATE TRIGGER trg_audit_log_no_delete BEFORE DELETE ON audit_log
 BEGIN SELECT RAISE(ABORT, 'audit_log is append-only; deletes are forbidden'); END;
 
+-- Measured performance of each pipeline run, so the dashboard's "avg processing
+-- time" is a real wall-clock number, never an invented one.
+CREATE TABLE run_metadata (
+    run_id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    run_at             TEXT NOT NULL,
+    invoice_count      INTEGER NOT NULL,
+    total_seconds      REAL NOT NULL,
+    avg_ms_per_invoice REAL NOT NULL,
+    model_version      TEXT NOT NULL
+);
+
 -- The human work list. Unlike the audit log this is mutable current-state, but
 -- every human resolution is ALSO written immutably into audit_log.
 CREATE TABLE exception_queue (

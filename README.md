@@ -8,6 +8,12 @@ records every step in a tamper-evident audit log. The AI never has authority ove
 money; it only classifies and explains what a deterministic control has already
 proven.
 
+![AuditLedger executive dashboard — 100% catch rate, $750 cost avoided, intact audit chain](docs/img/dashboard-hero.png)
+
+<sub>Executive dashboard (synthetic 100-invoice run). More views:
+[exception queue](docs/img/exception-queue.png) ·
+[audit-log browser](docs/img/audit-log.png).</sub>
+
 ---
 
 ## The financial thesis
@@ -110,6 +116,7 @@ table — none are estimated except where explicitly labeled.
 | Manual baseline cost | $1,250 (100 × $12.50, conservative low end) |
 | **Cost avoided** | **$750** (60 automated × $12.50) |
 | Estimated hours saved | 10.0 *(assumes 10 min/invoice manual touch time — configurable)* |
+| Avg processing time | sub-millisecond/invoice, deterministic compute (measured) vs the 14.6-day manual cycle |
 | Audit chain integrity | INTACT |
 | AI processing cost | $0 offline (not measured; honestly reported, never invented) |
 
