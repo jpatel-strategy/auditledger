@@ -13,6 +13,16 @@ executive "fintech audit" skin over the existing SQLite layer — no Milestone
 from __future__ import annotations
 
 import sys
+
+# Use a modern, bundled SQLite when available (e.g. on Streamlit Community Cloud,
+# whose system SQLite can be old). This MUST run before anything imports sqlite3.
+# Locally / on hosts without the wheel, it silently falls back to stdlib sqlite3.
+try:
+    __import__("pysqlite3")
+    sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+except ImportError:
+    pass
+
 from pathlib import Path
 
 # Make the ``src`` layout importable from a fresh clone without installation.
@@ -119,6 +129,18 @@ def _taxonomy_bars(by_type: dict[str, dict]) -> str:
     return rows
 
 
+def _bootstrap_database(db_path: str) -> str:
+    """Build + process the database. Wrapped in ``st.cache_resource`` by the
+    caller so it runs EXACTLY ONCE per process — even across Streamlit reruns and
+    concurrent sessions. This is what prevents a rerun from kicking off a second,
+    racing rebuild while the first ``executescript`` is still mid-flight (the
+    cloud-only "no such table: audit_log" crash)."""
+    from auditledger.service import ensure_database
+
+    ensure_database(db_path)
+    return db_path
+
+
 def main() -> None:
     import pandas as pd
     import streamlit as st
@@ -127,12 +149,13 @@ def main() -> None:
     from auditledger.agents.classification import AUTO_APPROVE
     from auditledger.db import audit_log, exception_queue
     from auditledger.db.database import connect
-    from auditledger.service import ensure_database, explain_invoice
+    from auditledger.service import explain_invoice
 
     st.set_page_config(page_title="AuditLedger", page_icon="🧾", layout="wide")
     st.markdown(_CSS, unsafe_allow_html=True)
 
-    ensure_database(config.DB_PATH)      # first launch builds everything
+    # Build the database exactly once per process (guards against the rerun race).
+    st.cache_resource(_bootstrap_database, show_spinner="Building AuditLedger database…")(config.DB_PATH)
     conn = connect(config.DB_PATH)
 
     roi = analytics.roi_summary(conn)

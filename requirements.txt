@@ -15,3 +15,9 @@ pandas>=2.2
 
 # Executive dashboard (Milestone 4)
 streamlit>=1.40
+
+# Modern bundled SQLite for hosts (e.g. Streamlit Community Cloud) whose system
+# SQLite is old. Linux-only wheels, so a marker keeps macOS/Windows clones
+# installing cleanly; the app shims it in at startup and falls back to stdlib
+# sqlite3 when it isn't present.
+pysqlite3-binary; platform_system == "Linux"
