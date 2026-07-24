@@ -1,0 +1,16 @@
+# AuditLedger brand theme — applied to native Streamlit widgets so the whole
+# app (not just our custom HTML) reads as one calm, precise "fintech audit"
+# surface. Palette from the UI design brief.
+[theme]
+primaryColor = "#1B9AAA"            # teal-500  — accents, active, links
+backgroundColor = "#F7F9FA"         # gray-50   — app background
+secondaryBackgroundColor = "#FFFFFF" # white     — cards, sidebar
+textColor = "#0D1B2A"               # navy-900  — primary text
+font = "sans serif"
+
+[server]
+headless = true
+
+[client]
+# Calmer surface for executives/recruiters: hide the developer toolbar.
+toolbarMode = "minimal"
