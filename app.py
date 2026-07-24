@@ -187,8 +187,8 @@ def main() -> None:
                    f"AuditLedger: {proc_display}/invoice (deterministic compute; "
                    f"excludes human review of exceptions).")
 
-    tab_overview, tab_queue, tab_audit = st.tabs(
-        ["📊 Overview", "🙋 Exception Queue", "🔍 Audit Log"]
+    tab_overview, tab_queue, tab_audit, tab_case = st.tabs(
+        ["📊 Overview", "🙋 Exception Queue", "🔍 Audit Log", "🏢 Case Study"]
     )
 
     # --- Overview ---------------------------------------------------------
@@ -289,6 +289,64 @@ def main() -> None:
                 } for t in story["timeline"]]),
                 hide_index=True,
             )
+
+    # --- Case Study (retail-scale modeling) -------------------------------
+    with tab_case:
+        from auditledger import case_study
+
+        s = case_study.model_scenario(
+            measured_automation_rate=roi["automation_rate"],
+            measured_catch_rate=catch,
+        )
+        st.markdown(
+            '<div style="background:#FFF7E0;border-left:3px solid var(--amber-500);'
+            'padding:10px 14px;border-radius:8px;color:var(--navy-700);font-size:13px">'
+            '<b>Illustrative modeling on public data.</b> Not affiliated with, endorsed '
+            'by, or commissioned by the named company. No dollar figure was identified in '
+            'its actual books — projections apply published benchmarks to stated '
+            'assumptions.</div>', unsafe_allow_html=True)
+
+        st.markdown(f"##### {s['retailer']} — modeled AP-risk scenario")
+        st.markdown(f'<div class="al-why">{case_study.headline(s)}</div>',
+                    unsafe_allow_html=True)
+
+        st.markdown(
+            '<div class="al-kpis">'
+            + _kpi_card(f'{s["modeled_invoice_volume"]/1e6:.1f}M/yr', "Modeled invoice volume")
+            + _kpi_card(f'${s["dup_leakage_low_usd"]/1e9:.1f}B–${s["dup_leakage_high_usd"]/1e9:.1f}B',
+                        "Duplicate-payment leakage addressable*", gold=True)
+            + _kpi_card(f'${s["processing_cost_addressable_usd"]/1e6:.0f}M',
+                        "Processing cost addressable", gold=True)
+            + _kpi_card(f'{s["measured_catch_rate"]:.0%}', "Measured catch rate (real run)")
+            + '</div>', unsafe_allow_html=True)
+        st.caption("*Published 0.8–2% duplicate-payment benchmark applied to modeled AP "
+                   "spend — an addressable range, not a figure found in any company's books.")
+
+        c_assume, c_result = st.columns(2)
+        with c_assume:
+            st.markdown("**Assumptions** — edit in `src/auditledger/case_study.py`")
+            st.dataframe(pd.DataFrame([
+                ("Company (public)", s["retailer"]),
+                ("Annual revenue (public)", f'${s["annual_revenue_usd"]/1e9:.1f}B'),
+                ("Cost-of-sales ratio", f'{s["cogs_ratio"]:.0%}'),
+                ("Modeled AP spend", f'${s["modeled_ap_spend_usd"]/1e9:.1f}B'),
+                ("Suppliers (public)", f'{s["supplier_count"]:,}+'),
+                ("Invoices/supplier/yr (assumed)", str(s["invoices_per_supplier_per_year"])),
+                ("Modeled invoice volume", f'{s["modeled_invoice_volume"]:,}/yr'),
+            ], columns=["assumption", "value"]), hide_index=True)
+        with c_result:
+            st.markdown("**Modeled results**")
+            st.dataframe(pd.DataFrame([
+                ("Measured catch rate (real run)", f'{s["measured_catch_rate"]:.0%}'),
+                ("Measured automation rate (real run)", f'{s["measured_automation_rate"]:.0%}'),
+                ("Processing cost addressable", f'${s["processing_cost_addressable_usd"]/1e6:.1f}M'),
+                ("Duplicate leakage addressable", f'${s["dup_leakage_low_usd"]/1e9:.1f}B–${s["dup_leakage_high_usd"]/1e9:.1f}B'),
+                ("Estimated hours saved", f'{s["estimated_hours_saved"]:,.0f}'),
+                ("Audit coverage", f'{s["audit_coverage"]:.0%}'),
+            ], columns=["metric", "value"]), hide_index=True)
+
+        st.caption(f"Source: {s['source_note']}")
+        st.caption(f"⚖️ {s['disclaimer']}")
 
     st.markdown(
         f'<div class="al-footer">Illustrative demo · synthetic data · {GITHUB_URL}</div>',

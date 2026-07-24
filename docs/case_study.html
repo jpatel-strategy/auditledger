@@ -1,0 +1,37 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@page { size: A4; margin: 16mm; }
+body { font-family: system-ui, sans-serif; color:#0D1B2A; margin:0; }
+.wm { font-size:26px; font-weight:700; letter-spacing:-.5px; }
+.wm .l { color:#1B9AAA; }
+.sub { color:#64727D; font-size:13px; margin-top:2px; }
+.banner { background:#FFF7E0; border-left:3px solid #E0A100; padding:8px 12px;
+  border-radius:8px; font-size:12px; color:#1B2D45; margin:14px 0; }
+.head { background:#E8F4F6; border-left:3px solid #1B9AAA; padding:12px 14px;
+  border-radius:8px; font-size:14px; margin:12px 0 18px; }
+.grid { display:flex; gap:20px; }
+.col { flex:1; }
+h3 { font-size:14px; margin:0 0 6px; }
+table { width:100%; border-collapse:collapse; font-size:12.5px; }
+td { padding:5px 6px; border-bottom:1px solid #E3E8EC; }
+td.k { color:#64727D; } td.v { text-align:right; font-weight:600;
+  font-family:"JetBrains Mono",monospace; }
+.foot { margin-top:18px; font-size:10.5px; color:#64727D; border-top:1px solid #E3E8EC;
+  padding-top:8px; }
+.gold { color:#D4A843; }
+</style></head><body>
+<div class="wm"><span>Audit</span><span class="l">Ledger</span> · Case Study</div>
+<div class="sub">Modeling AP risk at retail scale</div>
+<div class="banner"><b>Illustrative modeling on public data.</b> Not affiliated with,
+endorsed by, or commissioned by the named company. No dollar figure was identified in
+its actual books — projections apply published benchmarks to stated assumptions.</div>
+<div class="head">Modeled AuditLedger against Walmart Inc.'s publicly reported AP scale (~5,000,000 invoices/yr, assumed): a 100%-auditable control addressing an industry-benchmarked $3.9B–$9.7B/yr in duplicate-payment leakage and ~$37.5M in manual processing cost — every dollar traceable to a logged decision.</div>
+<div class="grid">
+  <div class="col"><h3>Assumptions</h3><table><tr><td class="k">Company (public)</td><td class="v">Walmart Inc.</td></tr><tr><td class="k">Annual revenue (public)</td><td class="v">$648.1B</td></tr><tr><td class="k">Cost-of-sales ratio</td><td class="v">75%</td></tr><tr><td class="k">Modeled AP spend</td><td class="v">$486.1B</td></tr><tr><td class="k">Suppliers (public)</td><td class="v">100,000+</td></tr><tr><td class="k">Invoices/supplier/yr (assumed)</td><td class="v">50</td></tr><tr><td class="k">Modeled invoice volume</td><td class="v">5,000,000/yr</td></tr></table></div>
+  <div class="col"><h3>Modeled results</h3><table><tr><td class="k">Measured catch rate (real run)</td><td class="v">100%</td></tr><tr><td class="k">Measured automation rate (real run)</td><td class="v">60%</td></tr><tr><td class="k">Processing cost addressable</td><td class="v">$37.5M</td></tr><tr><td class="k">Duplicate leakage addressable*</td><td class="v">$3.9B–$9.7B</td></tr><tr><td class="k">Estimated hours saved</td><td class="v">500,000</td></tr><tr><td class="k">Audit coverage</td><td class="v">100%</td></tr></table></div>
+</div>
+<p style="font-size:11px;color:#64727D;margin-top:10px">*Published 0.8–2% duplicate-payment
+benchmark applied to modeled AP spend — an addressable range, not a figure found in any
+company's books.</p>
+<div class="foot"><b>Source:</b> Walmart FY2024 10-K (fiscal year ended Jan 31, 2024): total revenue ~$648.1B; cost of sales ~75% of revenue; "100,000+ suppliers" widely reported. Publicly reported figures — verify against the latest 10-K.<br><br>Illustrative analysis using synthetic data scaled to publicly reported figures. Not affiliated with, endorsed by, or commissioned by the named company. No dollar figure was identified in that company's actual books; projections apply published industry benchmarks to stated assumptions.<br>
+github.com/jpatel-strategy/-auditledger · synthetic data</div>
+</body></html>

@@ -12,7 +12,8 @@ proven.
 
 <sub>Executive dashboard (synthetic 100-invoice run). More views:
 [exception queue](docs/img/exception-queue.png) ·
-[audit-log browser](docs/img/audit-log.png).</sub>
+[audit-log browser](docs/img/audit-log.png) ·
+[case study](docs/img/case-study.png).</sub>
 
 ---
 
@@ -119,6 +120,33 @@ table — none are estimated except where explicitly labeled.
 | Avg processing time | sub-millisecond/invoice, deterministic compute (measured) vs the 14.6-day manual cycle |
 | Audit chain integrity | INTACT |
 | AI processing cost | $0 offline (not measured; honestly reported, never invented) |
+
+---
+
+## Case study — modeling AP risk at retail scale (illustrative)
+
+> **Honesty frame:** this is a *demonstration modeled on publicly reported figures*,
+> not consulting work. Every dollar below is either **measured** from the real
+> synthetic run or an **illustrative projection** applying published industry
+> benchmarks to openly-stated assumptions. Not affiliated with, endorsed by, or
+> commissioned by the named company; no figure was identified in its actual books.
+
+Modeled against **Walmart's** publicly reported AP scale (~5M invoices/yr, assumed):
+a 100%-auditable control addressing an industry-benchmarked **$3.9B–$9.7B/yr in
+duplicate-payment leakage** (published 0.8–2% of outgoing payments) and **~$37.5M in
+manual processing cost** (measured 60% automation × the $12.50 benchmark) — every
+dollar traceable to a logged decision.
+
+- **Interactive:** the *Case Study* tab in the dashboard.
+- **One-pager:** [`docs/case_study.pdf`](docs/case_study.pdf) · [HTML](docs/case_study.html)
+  (regenerate with `python scripts/build_case_study.py`).
+- **Switch company / update to the latest 10-K:** edit `RETAILER` and `ASSUMPTIONS`
+  in `src/auditledger/case_study.py` — nothing else changes.
+
+Resume-safe phrasing: *"Modeled AuditLedger against a large retailer's publicly
+reported AP scale, illustrating an addressable multi-billion-dollar duplicate-payment
+leakage range with 100% decision auditability — using only synthetic data and public
+figures."*
 
 ---
 
