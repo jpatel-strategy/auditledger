@@ -30,6 +30,31 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
 GITHUB_URL = "github.com/jpatel-strategy/auditledger"
 
+# --- "About this project" copy (rendered in the sidebar expander) ---------
+_ABOUT_MD = """
+**What this is** — AuditLedger is a working demo of an AI agent that reconciles
+accounts-payable invoices — matching each one against its purchase order and
+goods receipt, catching errors, and deciding whether to auto-approve, flag, or
+escalate it.
+
+**Why it's different** — Most finance AI is a black box. This one is built like
+an auditor would build it: the math is deterministic (never a language-model
+guess), the AI only *recommends* — it never authorizes a payment — and every
+decision is written to an immutable audit log with a human sign-off on exceptions.
+
+**What you're seeing** — A full run against 100 synthetic invoices (15 vendors,
+30 deliberately seeded errors). All figures come from real runs against a hidden
+ground-truth table — 100% of seeded errors caught, 0 false auto-approvals, 60%
+straight-through automation, 100% decision auditability.
+
+**Honest note** — This is an illustrative demo on synthetic data, not production
+software or real company records. The Case Study tab models public figures at
+retail scale to show the size of the problem — it does not reflect any company's
+actual books.
+
+**Built by** Jay A. Patel · MBA candidate · [{gh}](https://{gh})
+""".format(gh=GITHUB_URL)
+
 # --- Design tokens (from the UI brief) ------------------------------------
 _CSS = """
 <style>
@@ -194,7 +219,11 @@ def main() -> None:
         st.markdown('<div class="al-wordmark" style="font-size:22px">'
                     '<span class="a">Audit</span><span class="l">Ledger</span></div>',
                     unsafe_allow_html=True)
-        st.caption("Auditable AI invoice reconciliation")
+        st.caption("Auditable AI invoice reconciliation — a portfolio demo by "
+                   "Jay A. Patel. An AI agent that reviews invoices, catches errors, "
+                   "and logs every decision. Runs on synthetic data.")
+        with st.expander("ℹ️ About this project"):
+            st.markdown(_ABOUT_MD)
         st.divider()
         st.metric("Invoices processed", roi["invoices_processed"])
         st.metric("Automation rate", f"{roi['automation_rate']:.0%}")
