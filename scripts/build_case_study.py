@@ -99,7 +99,7 @@ its actual books — projections apply published benchmarks to stated assumption
 benchmark applied to modeled AP spend — an addressable range, not a figure found in any
 company's books.</p>
 <div class="foot"><b>Source:</b> {s['source_note']}<br><br>{s['disclaimer']}<br>
-github.com/jpatel-strategy/-auditledger · synthetic data</div>
+github.com/jpatel-strategy/auditledger · synthetic data</div>
 </body></html>"""
 
 

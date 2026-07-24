@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AuditLedger — the AI invoice agent that shows its work</title>
+<meta name="description" content="An auditable AI invoice-reconciliation agent: deterministic math catches 100% of seeded AP defects, the LLM only recommends, and every decision is logged immutably.">
+<style>
+  :root{
+    --navy-900:#0D1B2A; --navy-700:#1B2D45; --teal-500:#1B9AAA; --teal-100:#E8F4F6;
+    --gold-500:#B98A1E; --green-600:#2E9E5B; --amber-500:#E0A100; --red-600:#C0392B;
+    --gray-50:#F7F9FA; --gray-200:#E3E8EC; --gray-500:#64727D; --white:#fff;
+    --mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Inter",system-ui,-apple-system,sans-serif;color:var(--navy-900);
+    background:var(--gray-50);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--teal-500);text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+  /* nav */
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0;
+    border-bottom:1px solid var(--gray-200)}
+  .wm{font-size:22px;font-weight:700;letter-spacing:-.5px}
+  .wm .l{color:var(--teal-500)}
+  .nav a.gh{font-size:14px;font-weight:600;color:var(--navy-700)}
+  /* hero */
+  .hero{padding:56px 0 36px;text-align:center}
+  .hero h1{font-size:clamp(28px,5vw,44px);line-height:1.1;margin:0 0 14px;font-weight:700}
+  .hero .prob{color:var(--gray-500);font-size:clamp(15px,2.4vw,18px);max-width:660px;margin:0 auto 26px}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+  .btn{display:inline-flex;align-items:center;min-height:46px;padding:0 24px;border-radius:10px;
+    font-weight:700;font-size:15px}
+  .btn.primary{background:var(--teal-500);color:#fff}
+  .btn.primary:hover{background:#178a99}
+  .btn.ghost{background:#fff;color:var(--navy-700);border:1px solid var(--gray-200)}
+  .trust{display:inline-block;margin-top:6px;padding:6px 14px;border-radius:999px;
+    background:var(--teal-100);color:var(--navy-700);font-size:13px;font-weight:600}
+  /* metrics */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:26px 0}
+  .card{background:#fff;border-radius:12px;border-top:3px solid var(--teal-500);
+    box-shadow:0 1px 3px rgba(13,27,42,.08);padding:22px}
+  .card .v{font-size:32px;font-weight:700;line-height:1.1}
+  .card .v.gold{color:var(--gold-500);font-family:var(--mono)}
+  .card .l{font-size:13px;color:var(--gray-500);margin-top:6px}
+  /* generic section */
+  section.block{padding:34px 0;border-top:1px solid var(--gray-200)}
+  h2{font-size:22px;margin:0 0 16px}
+  .shot img{width:100%;border-radius:12px;border:1px solid var(--gray-200);
+    box-shadow:0 2px 8px rgba(13,27,42,.08)}
+  .shot .cap{font-size:12px;color:var(--gray-500);margin-top:8px;text-align:center}
+  /* pillars */
+  .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+  .pillar{background:#fff;border-radius:12px;padding:20px;border:1px solid var(--gray-200)}
+  .pillar h3{margin:0 0 6px;font-size:16px}
+  .pillar p{margin:0;font-size:14px;color:var(--navy-700)}
+  /* case */
+  .banner{background:#FFF7E0;border-left:3px solid var(--amber-500);padding:12px 16px;
+    border-radius:8px;font-size:13px;color:var(--navy-700);margin-bottom:16px}
+  .headline{background:var(--teal-100);border-left:3px solid var(--teal-500);padding:14px 16px;
+    border-radius:8px;font-size:15px}
+  .limits li{margin:6px 0;color:var(--navy-700);font-size:14px}
+  footer{padding:28px 0 48px;border-top:1px solid var(--gray-200);color:var(--gray-500);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="nav">
+    <div class="wm"><span>Audit</span><span class="l">Ledger</span></div>
+    <!-- ===== SWAP #2: confirm this repo URL matches your repo name AFTER you rename it.
+         (The repo is currently "-auditledger" with a leading dash — rename to "auditledger"
+         so this link and the GitHub Pages URL jpatel-strategy.github.io/auditledger both work.) ===== -->
+    <a class="gh" href="https://github.com/jpatel-strategy/auditledger" target="_blank" rel="noopener">View on GitHub ↗</a>
+  </nav>
+
+  <header class="hero">
+    <h1>The AI invoice agent<br>that shows its work.</h1>
+    <p class="prob">Companies spend $12.50–$40 processing each invoice, and 39% contain errors.
+      AuditLedger recommends — it never pays without confidence or human sign-off, and every
+      decision is logged immutably.</p>
+    <div class="cta">
+      <!-- ===== SWAP #1: replace REPLACE_WITH_STREAMLIT_URL with your live Streamlit Cloud link once deployed ===== -->
+      <a class="btn primary" href="REPLACE_WITH_STREAMLIT_URL" target="_blank" rel="noopener">Open the Live Dashboard →</a>
+      <a class="btn ghost" href="https://github.com/jpatel-strategy/auditledger" target="_blank" rel="noopener">View the code</a>
+    </div>
+    <span class="trust">Every decision logged · Nothing paid without confidence or human sign-off</span>
+  </header>
+
+  <div class="metrics">
+    <div class="card"><div class="v">100%</div><div class="l">Error catch rate (30/30 seeded defects)</div></div>
+    <div class="card"><div class="v gold">60%</div><div class="l">Processing-cost reduction ($750 of $1,250)</div></div>
+    <div class="card"><div class="v">0</div><div class="l">Seeded errors ever auto-approved</div></div>
+    <div class="card"><div class="v">100%</div><div class="l">Audit coverage (hash-chained, intact)</div></div>
+  </div>
+
+  <section class="block shot">
+    <h2>Executive dashboard</h2>
+    <img src="img/dashboard-hero.png" alt="AuditLedger executive dashboard showing 100% catch rate, $750 cost avoided, and an intact audit chain">
+    <div class="cap">Live dashboard on a 100-invoice synthetic run · more views:
+      <a href="img/exception-queue.png">exception queue</a> ·
+      <a href="img/audit-log.png">audit-log browser</a> ·
+      <a href="img/case-study.png">case study</a></div>
+  </section>
+
+  <section class="block">
+    <h2>Why it's trustworthy</h2>
+    <div class="pillars">
+      <div class="pillar"><h3>Deterministic math</h3>
+        <p>A classic 3-way match (Invoice ↔ PO ↔ Goods Receipt) in pure Python catches every
+        discrepancy. No LLM ever performs the reconciliation arithmetic.</p></div>
+      <div class="pillar"><h3>The LLM only recommends</h3>
+        <p>It proposes AUTO-APPROVE / FLAG / ESCALATE with a confidence score and reasoning — but a
+        hard guardrail forbids auto-approving anything the matcher flagged, and a Critic agent checks
+        its consistency.</p></div>
+      <div class="pillar"><h3>Immutable audit log</h3>
+        <p>Every decision is appended to a hash-chained, append-only SQLite log. Any tampering is
+        detectable, and any invoice's full disposition is explainable from the log alone.</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Case study — modeling AP risk at retail scale</h2>
+    <div class="banner"><b>Illustrative modeling on public data.</b> Not affiliated with, endorsed by,
+      or commissioned by the named company. No dollar figure was identified in its actual books —
+      projections apply published industry benchmarks to openly-stated assumptions.</div>
+    <p class="headline">Modeled against <b>Walmart's</b> publicly reported AP scale (~5M invoices/yr,
+      assumed): a 100%-auditable control addressing an industry-benchmarked <b>$3.9B–$9.7B/yr in
+      duplicate-payment leakage</b> (published 0.8–2% of outgoing payments) and <b>~$37.5M in manual
+      processing cost</b> — every dollar traceable to a logged decision.</p>
+    <p style="font-size:14px;margin-top:14px">One-page brief: <a href="case_study.pdf">case_study.pdf</a></p>
+  </section>
+
+  <section class="block">
+    <h2>Honest limitations (v1)</h2>
+    <ul class="limits">
+      <li><b>Synthetic data</b> — invoices, POs, and receipts are generated from a fixed seed; results demonstrate the controls, not real-world extraction accuracy.</li>
+      <li><b>Single currency / jurisdiction</b> — one tax rate, USD only.</li>
+      <li><b>Offline by default</b> — without an API key the LLM steps use deterministic fallbacks; live-model token cost is not yet metered.</li>
+      <li><b>Assumption-based ROI</b> — "hours saved" and the case-study volume rest on stated, editable assumptions, not measured studies.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Illustrative demo · synthetic data ·
+    <a href="https://github.com/jpatel-strategy/auditledger">github.com/jpatel-strategy/auditledger</a><br><br>
+    AuditLedger is a portfolio demonstration. It illustrates an auditable pattern for AI in finance;
+    it is not a production AP system, and is not affiliated with any company named in the case study.
+  </footer>
+
+</div>
+</body>
+</html>

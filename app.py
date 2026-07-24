@@ -18,7 +18,7 @@ from pathlib import Path
 # Make the ``src`` layout importable from a fresh clone without installation.
 sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
-GITHUB_URL = "github.com/jpatel-strategy/-auditledger"
+GITHUB_URL = "github.com/jpatel-strategy/auditledger"
 
 # --- Design tokens (from the UI brief) ------------------------------------
 _CSS = """
